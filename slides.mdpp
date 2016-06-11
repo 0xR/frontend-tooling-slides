@@ -1,0 +1,74 @@
+# JS tooling
+Gert Hengeveld<br >
+Ruben Oostinga
+
+https://twitter.com/GHengeveld
+https://twitter.com/rubenoostinga
+
+![Logo Xebia](img/logo-xebia.png)
+
+---
+
+### Webpack
+
+![What is webpack](img/what-is-webpack.png)
+
+---
+
+### What problem are we solving?
+
+Note:
+- Only solve problems you have
+- Especially when you already have a working project
+- There are too many cool new tools to use everything
+
+---
+
+### What problem are we solving?
+
+- You want to bundle your javascript for performance
+- 
+
+---
+
+### Comparison to various tools
+
+- Grunt
+- Gulp
+- RequireJS
+- browserify
+- jspm
+
+Note:
+- Give a history of where these tools come from
+- Compare their features
+
+---
+
+### Grunt: The JavaScript task runner
+- Runs tasks sequentially
+- Writes intermediate files to disk
+
+![Logo grunt](img/grunt-logo.png)
+
+Note:
+- Lots of configuration
+- Task declaration separate from task configuration
+- Writing to disk can get slow
+- But it works, we are still using it at wehkamp
+
+---
+
+### Gulp: The streaming build system
+
+- Define tasks ask streams
+- Don't write to disk for intermediate results
+- Tasks run parallel
+
+![Logo gulp](img/logo-gulp.png)
+
+Note:
+- The configuration is easier to read
+- Runs faster due to 
+  - parallelization
+  - not writing to disk
