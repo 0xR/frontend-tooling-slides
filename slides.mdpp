@@ -9,6 +9,75 @@ https://twitter.com/rubenoostinga
 
 ---
 
+### Introduce yourself
+
+- What is your name?
+- What is your current front-end experience?
+- What do you want to get out of this course?
+
+---
+
+### Concepts to understand
+
+- JS bundles
+- Minification
+- JS dependencies
+- Modules
+
+Note:
+- JS bundle:
+  - Concatenation of JS files
+  - Faster to load than separate files
+- Minification:
+  - Shortens all variables names
+  - Removes whitespace
+  - Other optimizes for minimal filesize
+  - Goal: load fast in browser
+- JS depedencies
+  - You can put all javascript in a single file
+  - Too big -> split it up
+  - Split up files need to run in a specific order
+  - Code depends on other code
+  - Example:
+    - Angular module declaration should run before you add controllers / directives to that angular module
+- Modules:
+  - JS file with private scope
+  - By default vars declarations are global
+  - Wrapping code in a function makes it a module
+  - Immediately-Invoked Function Expression (IIFE)
+
+vvv
+
+### Immediately-Invoked Function Expression (IIFE)
+``` javascript
+var counter = (function(){
+  var i = 0;
+  return {
+    get: function(){
+      return i;
+    },
+    set: function( val ){
+      i = val;
+    },
+    increment: function() {
+      return ++i;
+    }
+  };
+}());
+```
+
+Note:
+- Example of a classic JS module
+- There are others:
+  - AMD
+  - CommonJS: like NodeJS
+  - ES6: JS standard modules
+- Function is invoked immediately
+- `var i` is locally scoped
+- a public API is exposed:
+  - `get`, `set`, `increment`
+---
+
 ### Webpack
 
 ![What is webpack](img/what-is-webpack.png)
@@ -88,8 +157,37 @@ Note:
 
 ### RequireJS: A JS module loader
 
-- Declare dependencies instead of a list of scripts
-- Loads dependencies via XHR requrests in the browser
+- Declare dependencies per module instead of a list of scripts
+- Loads dependencies via XHR requests in the browser
 - Only supports Asynchronous Module Definition (AMD)
-- Can optimize files in the br
-- Build to k
+- Bundle files in build step
+- Can be used on NodeJS as well
+
+Note:
+
+- One of the first module loaders
+  - Started in 2009
+  - Based on the dojo toolkit loader
+- Module loaders are different from task runners
+- Understand JS dependencies
+- No list of scripts with implicit dependencies
+  - Like angular module example
+
+vvv
+
+### Asynchronous Module Definition (AMD)
+
+``` javascript
+define(['jquery'] , function ($) {
+  return function () {};
+});
+```
+
+Note:
+- Similar to NG DI
+- Dependencies in array
+- Function invoked with instances
+
+---
+
+
