@@ -469,3 +469,116 @@ vvv
 var $ = require('jquery');
 var _template = require('lodash/template');
 ```
+
+---
+
+### Basic configuration
+
+webpack.config.js
+``` javascript
+module.exports = {
+    entry: "./index.js",
+    output: {
+        path: __dirname,
+        filename: "bundle.js"
+    },
+    module: {
+        loaders: [
+            { test: /\.css$/, loader: "style!css" }
+        ]
+    }
+};
+```
+
+Note:
+- Entry is the root of dependency graph
+- Loaders define a pipeline
+- Loads right to left, just like JS functions
+  - `styleLoader(cssLoader(css))`
+- test is a regex on the full filename of resources
+- Css-loader:
+  - interpret url / @import declarations
+  - minify css
+  - css modules
+- Style-loader:
+  - Keeps the css in JS
+  - Puts the output of css-loader in script tag
+  - Ensures hot module replacement works for css
+  - You might not want this in production
+
+vvv
+
+### Add some css to our webpack project
+
+```
+npm i --save-dev css-loader style-loader
+```
+
+index.css
+``` css
+body {
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
+}
+```
+
+render.css
+``` css
+.render__heading {
+  line-height:1.2;
+}
+```
+
+Note:
+- Only an example
+
+vvv
+
+### Import your css in JS
+
+``` javascript
+// in index.js
+require('index.css');
+
+// in render.js
+require('render.css');
+```
+
+Note:
+
+- Again look at your bundle.js
+- Style-loader add a lot of JS
+
+---
+
+### Hot module replacement
+- Replaces modules without reloading
+- Only works when there is no state
+- Send new versions over websockets
+
+Note:
+
+- Gives you fast feedback
+- Doesn't wipe out app state like
+  - form fields
+  - opened modals
+- Works well with React not so well with Angular
+  - However with some discipline you can make it work for both
+- Css has no state
+
+vvv
+
+### Trying out HMR
+- add an input box in render.js
+
+``` sh
+npm install --save-dev webpack-dev-server
+webpack-dev-server --hot --inline
+```
+
+- Browse to `http://localhost:8080`
+- Now edit some css files
