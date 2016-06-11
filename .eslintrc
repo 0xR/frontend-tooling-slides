@@ -1,0 +1,14 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "env": {
+      "mocha": true
+  },
+  "globals": {
+    "expect": false,
+    "sinon": false
+  },
+  "rules": {
+      "no-restricted-globals": [2, "fetch"]
+  }
+}
