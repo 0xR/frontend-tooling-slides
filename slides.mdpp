@@ -163,6 +163,8 @@ Note:
 - Bundle files in build step
 - Can be used on NodeJS as well
 
+![Logo RequireJS](img/logo-requirejs.png)
+
 Note:
 
 - One of the first module loaders
@@ -190,4 +192,53 @@ Note:
 
 ---
 
+### Browserify: Run NodeJS modules in the browser
 
+- Bundles files
+- Plugins which only do one thing
+  - babelify
+  - css-modulesify
+- Configuration in package.json
+- Shims for browser versions of NodeJS core libaries
+
+![Logo browserify](img/logo-browserify.png)
+
+Note:
+- NodeJS modules are CommonJS modules
+- Files with require calls
+- Browserify is focussed
+  - Easy configuration
+  - Only do one thing: Unix philosophy
+- Shimmed core libs:
+  - http
+  - crypto
+  - path
+- Used by react itself
+
+---
+
+### JSPM frictionless browser package management
+
+- Package manager which uses the SystemJS module loader
+- Loads modules from the browser just like RequireJS
+- Runs transpilation in the browser
+- Has CLI tool that automates configuration
+
+![Logo jspm](img/logo-jspm.png)
+
+Note:
+- New project
+  - Is it ready yet?
+- Package manager means:
+ - Calls NPM, bower or git
+ - Has a registry of what to call when
+- SystemJS universal loader:
+  - Like RequireJS in the browser
+  - AMD, commonjs and es6 modules
+  - supports transpilation
+- All error in browser
+- Easy to set up with cli
+- Slow for big projects
+  - HTTP2 will improve
+  - JSPM server is beta
+- Standard for Angular 2
