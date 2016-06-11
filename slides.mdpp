@@ -33,11 +33,13 @@ Note:
 
 ### Comparison to various tools
 
-- Grunt
-- Gulp
-- RequireJS
-- browserify
-- jspm
+- Task runners
+  - Grunt
+  - Gulp
+Module loaders / bundlers
+  - RequireJS
+  - browserify
+  - jspm
 
 Note:
 - Give a history of where these tools come from
@@ -52,10 +54,16 @@ Note:
 ![Logo grunt](img/grunt-logo.png)
 
 Note:
+- Which tasks can it do?
+  - Call a transpiler
+  - Concatenate files
+  - Call a minifier
 - Lots of configuration
 - Task declaration separate from task configuration
 - Writing to disk can get slow
 - But it works, we are still using it at wehkamp
+- Does not understand dependencies
+  - Only understands filesystem
 
 ---
 
@@ -69,6 +77,19 @@ Note:
 
 Note:
 - The configuration is easier to read
-- Runs faster due to 
+- Runs faster due to:
   - parallelization
   - not writing to disk
+- Still a task runner
+  - Does not understand dependencies
+    - Only understands filesystem
+
+---
+
+### RequireJS: A JS module loader
+
+- Declare dependencies instead of a list of scripts
+- Loads dependencies via XHR requrests in the browser
+- Only supports Asynchronous Module Definition (AMD)
+- Can optimize files in the br
+- Build to k
