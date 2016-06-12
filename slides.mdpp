@@ -582,3 +582,145 @@ webpack-dev-server --hot --inline
 
 - Browse to `http://localhost:8080`
 - Now edit some css files
+
+---
+
+### Webpack validator
+
+- Webpack doesn't validate its config
+- This results in confusing errors
+- `webpack-validator` adds much better error messages
+
+Note:
+- works with runtime type checking
+- add smarter rules as well
+- is extensible
+- Note: extend schema if non-standard config
+- Both cli and in config
+
+vvv
+
+### Add webpack-validator to you config
+
+``` sh
+npm i --save-dev webpack-validator
+```
+
+``` javascript
+var validate = require('webpack-validator');
+module.exports = validate({ /* ... your webpack config */ });
+```
+
+- Try changing `loader` to `loaders`
+
+---
+
+### Babel: Use next generation JS today
+
+- Transpilation: Convert new JS to old JS
+- Plugins for:
+  - es2015
+  - React
+  - EcmaScript proposals
+- Can transpile in memory with `babel-register`
+- Requires polyfills for library features like
+  - New Object, Array methods
+  - Promise, Set, Map
+
+
+Note:
+
+vvv
+
+### Compatibility table
+
+- https://kangax.github.io/compat-table/es6/
+
+Note:
+- Chrome caught up
+- Can't transpile everything
+- IE11 doesn't have any es6 features
+
+vvv
+
+### Babel in production
+- Don't run in `babel-register` on production server
+- Use the babel runtime to avoid duplication of some boilerplate
+- Be careful with the babel-polyfill it is bigger than jQuery
+
+Note:
+- When running JS server-side
+- Babel generates helper methods, runtime avoid duplication
+- polyfill is big, use specific features from core-js
+
+---
+
+### Adding babel loader
+
+- Enable transpiling es2015 to es5
+- Don't run for `node_modules`
+- Write webpack config in es2015
+
+vvv
+
+### Adding babel loader
+
+
+``` sh
+npm i --save-dev babel-loader babel-core babel-preset-stage-2\
+babel-preset-es2015
+```
+
+``` javascript
+// Add to loaders in webpack config
+{
+  test: /\.js$/,
+  exclude: /node_modules/,
+  loader: 'babel'
+},
+```
+.babelrc
+
+``` json
+{
+  "presets": ["es2015", "stage-2"]
+}
+```
+
+Note:
+
+- Could configure babel in webpack config
+- Using .babelrc for babel-register webpack.config.js
+
+vvv
+
+### webpack.config.js in es2015
+
+``` sh
+mv webpack.config.js webpack.config.babel.js
+```
+
+webpack.config.js
+``` javascript
+require('babel-core/register');
+
+module.exports = require('./webpack.config.babel.js');
+```
+
+- Use es2015 features in `webpack.config.babel.js`
+
+Note:
+- es2015 like imports
+- export default
+
+---
+
+### Make a production build
+
+- Minify your javascript
+- Extract css file
+- Use hashes for cache busting
+
+vvv
+
+
