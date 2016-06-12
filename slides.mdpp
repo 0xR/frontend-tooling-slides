@@ -615,6 +615,10 @@ module.exports = validate({ /* ... your webpack config */ });
 
 ---
 
+![Logo babel](img/logo-babel.png)
+
+vvv
+
 ### Babel: Use next generation JS today
 
 - Transpilation: Convert new JS to old JS
@@ -720,6 +724,11 @@ Note:
 - Minify your javascript
 - Extract css file
 - Use hashes for cache busting
+
+Note:
+- Cache static files indefinitely
+- Client should get updates
+- Hash in filename ensures new fetch
 
 vvv
 
