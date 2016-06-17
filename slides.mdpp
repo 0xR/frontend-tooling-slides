@@ -232,7 +232,7 @@ Note:
 - Runs tasks sequentially
 - Writes intermediate files to disk
 
-![Logo grunt](img/grunt-logo.png)
+<img src=img/grunt-logo.png alt="Logo grunt" width="200">
 
 Note:
 - Which tasks can it do?
@@ -639,11 +639,14 @@ vvv
 ### Compatibility table
 
 - https://kangax.github.io/compat-table/es6/
+- http://node.green/
 
 Note:
 - Chrome caught up
 - Can't transpile everything
 - IE11 doesn't have any es6 features
+- NodeJS 6 has almost all es6 features
+- Note no engine supports import statements
 
 vvv
 
@@ -732,4 +735,204 @@ Note:
 
 vvv
 
+### How to update your config?
 
+- You can use JS in your config
+- L
+
+### TODO:
+hot reloading JS
+- React Hot Loader 3 beta https://github.com/gaearon/react-hot-boilerplate/pull/61
+- https://medium.com/@dan_abramov/hot-reloading-in-react-1140438583bf#.6lvx7pqdy
+- Vanilla hot reloading example
+
+---
+
+### Advanced topics
+
+- Using webpack on the server https://github.com/halt-hammerzeit/universal-webpack
+- Bundle splitting https://webpack.github.io/docs/code-splitting.html
+
+Note:
+- Split bundles for vendor or per page
+
+---
+
+### Issues with CSS
+- Selectors are global
+- Selectors cascade
+- Elements often need many selectors
+- Dependencies
+- Dead code elimination
+
+
+Note:
+- CSS was developed for styling documents
+- Todays web apps consist of components
+- Global selectors:
+  - careful to avoid name collisions
+  - can't have selectors like red, button
+- Cascading:
+  - Select elements in sub components
+- CSS is separate from components
+- Might include styling for unused components
+
+vvv
+
+### Existing solution
+``` css
+/* components/submit-button.css */
+.button { /* all styles for Normal */ }
+.button--disabled { /* overrides for Disabled */ }
+.button--error { /* overrides for Error */ }
+.button--in-progress { /* overrides for In Progress */
+```
+``` html
+<button class="button button--in-progress">Processing...</button>
+```
+
+Note:
+- Only class selectors solves the issue of cascading style
+- Use naming schemes like BEM
+- Naming schemes solve naming conflicts
+- Not solved:
+  - Dependencies
+  - Dead code elimination
+
+---
+
+### CSS modules
+- Import CSS in Javascript
+- Use name mangling to avoid name collisions
+- Compose styles
+
+<img src=img/logo-css-modules.png alt="Logo css-modules" width="250">
+
+Note:
+- Import CSS in JS:
+  - Only include used css
+  - Make CSS part of bundle splitting
+- Name mangling:
+  - Make a hash of the contents of the style in the class name
+  - Could make your names like a random string
+- Example of composition
+
+vvv
+
+### CSS modules example
+``` css
+/* components/submit-button.css */
+.normal { /* all styles for Normal */ }
+.disabled { /* all styles for Disabled */ }
+.error { /* all styles for Error */ }
+.inProgress { /* all styles for In Progress */
+```
+``` javascript
+/* components/submit-button.js */
+import styles from './submit-button.css';
+
+buttonElem.innerHTML = `<button class=${styles.normal}>
+    Submit
+</button>`;
+```
+
+``` html
+<!-- resulting DOM -->
+<button class="components_submit_button__normal__abc5436">
+  Processing...
+</button>
+```
+
+Note:
+- Use simple names without collision
+- Explicit dependency between JS and CSS
+- Name is mangled
+- Currently looks like BEM, but could be random
+
+vvv
+
+### CSS modules composition example
+``` css
+/* components/button.css */
+.common {}
+.normal { composes: common; }
+.error { composes: common; }
+```
+
+``` javascript
+import styles from './comonents/button.css';
+buttonElem.innerHTML = `<button class=${styles.normal}>
+    Submit
+</button>`;
+```
+
+``` javascript
+styles: {
+  common: "button__common__abc5436",
+  normal: "button__common__abc5436 button__normal__def6547",
+  error: "button__common__abc5436 button__error__1638bcd"
+}
+```
+
+Note:
+- CSS composes by itself:
+    - Applying multiple classes
+- Compose by applying 2 classes
+- Only need to set one class in innerHTML
+- No additional CSS generated for composition
+
+vvv
+
+### Composing across files
+```
+/* colors.css */
+.primary {
+  color: #720;
+}
+.secondary {
+  color: #777;
+}
+```
+```
+/* submit-button.css */
+.common { /* font-sizes, padding, border-radius */ }
+.normal {
+  composes: common;
+  composes: primary from "../shared/colors.css";
+}
+```
+
+Note:
+- Now normal will be 3 classes:
+  - itself
+  - common
+  - primary
+- This is really powerful:
+  - Share code
+  - Name styles yourself
+
+vvv
+
+### Next level CSS modules
+``` css
+.element {
+  composes: large from "./typography.css";
+  composes: dark-text from "./colors.css";
+  composes: padding-all-medium from "./layout.css";
+  composes: subtle-shadow from "./effect.css";
+}
+```
+
+Note:
+- Note the friendly names
+- No duplication
+- Create new styles just by composing existing styles
+
+---
+
+### PostCSS
+
+
+### Sources
+- http://glenmaddern.com/articles/css-modules
+- https://speakerdeck.com/vjeux/react-css-in-js
