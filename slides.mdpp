@@ -228,7 +228,7 @@ Note:
 
 ---
 
-### Grunt: The JavaScript task runner
+### Grunt: The javascript task runner
 - Runs tasks sequentially
 - Writes intermediate files to disk
 
@@ -357,7 +357,7 @@ Note:
 
 ---
 
-### Rollup.js: The next-generation JavaScript module bundler
+### Rollup.js: The next-generation javascript module bundler
 - Dead code elimination for ES2015 modules via tree shaking
 - Plugin to convert CommonJS to ES2015
 
@@ -739,12 +739,39 @@ vvv
 
 - You can use JS in your config
 - L
+TODO make production build
 
-### TODO:
-hot reloading JS
-- React Hot Loader 3 beta https://github.com/gaearon/react-hot-boilerplate/pull/61
-- https://medium.com/@dan_abramov/hot-reloading-in-react-1140438583bf#.6lvx7pqdy
-- Vanilla hot reloading example
+---
+
+### Linting javascript
+- The earlier you find an error the better
+- There were various tools: jslint, jshint, jscs
+- Now the standard tool is eslint
+
+Note:
+- Don't waste time looking for errors
+- First there was jslint
+- jslint really strict and not configurable
+- jshint more sensible and configurable
+- jscs checks for style errors
+
+vvv
+
+### ESLint: The pluggable linting utility for javascript and JSX
+- parses javascript and checks for bugs and style errors
+- has multiple third-party configs
+- supports custom parsers (babel)
+- has a fix option to fix some error automatically
+
+Note:
+- eslint does what both jshint and jscs do
+- eslint is faster than both combined
+- configs are difficult to make, many rules
+- not all error can be fixed automatically
+- working on making it better:
+  - conflicts with other rules
+
+TODO eslint exercise
 
 ---
 
@@ -802,20 +829,20 @@ Note:
 ---
 
 ### CSS modules
-- Import CSS in Javascript
-- Use name mangling to avoid name collisions
+- Import CSS in javascript
+- Class names have local scope
 - Compose styles
 
 <img src=img/logo-css-modules.png alt="Logo css-modules" width="250">
 
 Note:
+- Similar to JS modules, no more globals
 - Import CSS in JS:
   - Only include used css
   - Make CSS part of bundle splitting
-- Name mangling:
-  - Make a hash of the contents of the style in the class name
-  - Could make your names like a random string
-- Example of composition
+- Works in all browsers:
+- Not actually local scope, but emulation
+- Example of composition similar to SASS extends
 
 vvv
 
@@ -844,10 +871,14 @@ buttonElem.innerHTML = `<button class=${styles.normal}>
 ```
 
 Note:
-- Use simple names without collision
+- import styles -> style object containing class name
+- Why are these local style?
+  - You can only get the name by importing the style
+- Name mangling:
+  - Make a hash of the contents of the style in the class name
+  - Currently looks like BEM, but could be random
 - Explicit dependency between JS and CSS
-- Name is mangled
-- Currently looks like BEM, but could be random
+- CSS is part of the component
 
 vvv
 
@@ -930,8 +961,117 @@ Note:
 
 ---
 
-### PostCSS
+### PostCSS: A tool for transforming CSS with JS
+- Parses CSS or CSS-like syntax
+- Transforms like:
+  - adding vendor prefixes
+  - adding experimental CSS features
+  - custom CSS extensions
+  - Minify CSS
+- Lint your CSS
 
+![Logo babel](img/logo-postcss.svg)
+
+
+Note:
+- The name says it all
+- Made possible by parsing
+- Code more readable without prefixes like `-webkit-`, `-moz-`, `-ms-`
+- cssnext run experimental CSS features
+- Add SASS like features
+
+vvv
+
+### Autoprefixer
+- Add prefixes if needed
+- Removes prefixes if they're not needed
+- Can target browsers with http://caniuse.com queries:
+  - `last 2 versions`
+  - `> 5% in IN`
+  - `not ie <= 8`
+
+Note:
+- Prefixes are a difficult problem
+- Styling just might break in some browsers
+- caniuse.com is really useful + demo:
+  - border-radius
+  - flex
+  - IE9 is gone, fallen below 0.5%
+
+vvv
+
+
+### Autoprefixer example
+``` css
+:fullscreen a {
+    display: flex
+}
+```
+
+``` css
+webkit-full-screen a {
+    display: -webkit-box;
+    display: flex
+}
+:-moz-full-screen a {
+    display: flex
+}
+:-ms-fullscreen a {
+    display: -ms-flexbox;
+    display: flex
+}
+:fullscreen a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+}
+```
+
+Note:
+- difficult to figure out yourself
+- only adding whats needed reduces file size
+
+vvv
+
+### cssnext var example
+``` css
+:root {
+  --fontSize: 12pt;
+}
+
+.button {
+  font-size: var(--fontSize)
+}
+```
+
+``` css
+.button {
+  font-size: 12pt
+}
+```
+
+Note:
+- cssnext implements actual standars
+- always prefer standards
+- Still have to get used to the var syntax
+- Check out other cool features like:
+  - nesting
+  - color() function
+  - custom selectors
+
+vvv
+
+### Other transform to check out
+- Lost grid: https://github.com/peterramsing/lost
+- Precss, SASS in poscss: https://github.com/jonathantneal/precss
+- Minification: https://github.com/leodido/postcss-clean or https://github.com/lahmatiy/postcss-csso
+
+Note:
+- Generate a whole grid with simple CSS
+- precss is a collection of postcss plugins which give sass and some cssnext features
+- There a multiple minifiers, there are benchmarks
+
+---
 
 ### Sources
 - http://glenmaddern.com/articles/css-modules
