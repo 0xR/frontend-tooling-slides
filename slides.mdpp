@@ -532,6 +532,7 @@ Note:
   - interpret url / @import declarations
   - minify css
   - css modules
+  - camelCase selectors
 - Style-loader:
   - Keeps the css in JS
   - Puts the output of css-loader in script tag
@@ -545,6 +546,7 @@ vvv
 ```
 npm i --save-dev css-loader style-loader
 ```
+
 
 index.css
 ``` css
@@ -1277,12 +1279,59 @@ vvv
 ### Other transforms to check out
 - Lost grid: https://github.com/peterramsing/lost
 - Precss, SASS in poscss: https://github.com/jonathantneal/precss
+- PostCSS-js, write CSS with JS: https://github.com/postcss/postcss-js
 - Minification: https://github.com/leodido/postcss-clean or https://github.com/lahmatiy/postcss-csso
 
 Note:
 - Generate a whole grid with simple CSS
 - precss is a collection of postcss plugins which give sass and some cssnext features
+- If you need advanced logic in css, consider postcss-js
 - There a multiple minifiers, there are benchmarks
+
+---
+
+### PostCSS exercise
+``` sh
+npm i --save-dev postcss-loader autoprefixer precss
+```
+``` javascript
+// in webpack.config.babel.js
+import precss from 'precss';
+import autoprefixer from 'autoprefixer';
+
+// ...
+
+// Add to css loader
+const cssLoaderConfig = '{{ existing loaders }}!postcss'
+
+// update prodPlugins for viewing styles easily
+const prodPlugins = production ? [
+  new ExtractTextPlugin('style.css', { allChunks: true }),
+] : [];
+
+// Add PostCSS config to webpack config
+{
+  plugins: ...,
+  postcss: () => [
+    autoprefixer({ browsers: ['> 0.5% in NL'] }),
+    lost,
+  ],
+}
+```
+``` sh
+NODE_ENV=production webpack-dev-server
+# browse to http://localhost:8080/style.css
+```
+
+vvv
+
+### Try out some new features
+``` css
+/* add somewhere to see prefixes */
+display: flex;
+```
+
+- Use some of the features listed here: https://github.com/jonathantneal/precss
 
 ---
 
