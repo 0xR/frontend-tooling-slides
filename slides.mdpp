@@ -836,6 +836,7 @@ Note:
 
 - Using webpack on the server https://github.com/halt-hammerzeit/universal-webpack
 - Bundle splitting and async loading https://webpack.github.io/docs/code-splitting.html
+- Library for making production configs easier to read: https://github.com/survivejs/webpack-merge
 
 Note:
 - Split bundles for vendor or per page
@@ -1115,6 +1116,64 @@ Note:
 
 ---
 
+### CSS Modules exercise
+```javascript
+// Replace the css loader with:
+const cssLoaderConfig = 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+
+// Experiment editing localIdentName
+```
+``` css
+/* update render.css to remove BEM */
+.heading {
+  line-height:1.2;
+}
+
+.paragraph {
+  font-family: sans-serif
+}
+```
+
+Note:
+- Long string can be avoided with library
+- Enabled modules
+- importLoaders is a workaround, number of loaders after css
+- The name of css classes to be used
+
+vvv
+
+### Import the styles
+
+```javascript
+// In render.js
+import styles from './render.css';
+
+// ...
+
+const heading = `<h1 class="${styles.heading}">Hello from renderer</h1>`;
+const paragraph = `<p class="${styles.paragraph}">This is a paragraph</p>`;
+```
+
+vvv
+
+### Composition
+
+``` css
+/* typography.css */
+.default-font {
+  font-family: sans-serif
+}
+
+```
+compose default-font in render.css
+
+---
+
+### Further topics
+- Avoid long query strings https://github.com/jsdf/webpack-combine-loaders
+
+---
+
 ### PostCSS: A tool for transforming CSS with JS
 - Parses CSS or CSS-like syntax
 - Transforms like:
@@ -1205,7 +1264,7 @@ vvv
 ```
 
 Note:
-- cssnext implements actual standars
+- cssnext implements actual standards
 - always prefer standards
 - Still have to get used to the var syntax
 - Check out other cool features like:
@@ -1215,7 +1274,7 @@ Note:
 
 vvv
 
-### Other transform to check out
+### Other transforms to check out
 - Lost grid: https://github.com/peterramsing/lost
 - Precss, SASS in poscss: https://github.com/jonathantneal/precss
 - Minification: https://github.com/leodido/postcss-clean or https://github.com/lahmatiy/postcss-csso
