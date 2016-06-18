@@ -76,8 +76,8 @@ Note:
 - `var i` is locally scoped
 - a public API is exposed:
   - `get`, `set`, `increment`
----
 
+---
 
 ### What problem are we solving?
 
@@ -92,7 +92,8 @@ Note:
 
 - You want to bundle your javascript for performance
 - There are dependencies between modules
-- 
+- A giant list of files is hard to maintain
+
 
 vvv
 
@@ -216,7 +217,7 @@ vvv
 - Task runners
   - Grunt
   - Gulp
-Module loaders / bundlers
+- Module loaders / bundlers
   - RequireJS
   - browserify
   - jspm
@@ -472,21 +473,52 @@ var _template = require('lodash/template');
 
 ---
 
+### Loaders
+- Loaders change how Webpack will handle files
+- Allow resources other than JS to be loaded
+- Can do things like:
+  - Transpiling: `babel-loader` `postcss-loader`
+  - Moving files: `file-loader`
+  - Use CSS in JS: `style-loader`
+
+Note:
+- Webpack parses 
+- We'll show examples in exercises
+
+vvv
+
+### File loader example
+``` javascript
+var url = require("file!./file.png");
+```
+- copies file.png in the output directory
+- returns a url like: "/public-path/file.69e351f.png"
+
+Note:
+- Webpack parses require methods
+- Determines which loaders to use
+- Loaders can also be defined in webpack config
+
+---
+
 ### Basic configuration
 
 webpack.config.js
 ``` javascript
+const path = require('path');
+
 module.exports = {
-    entry: "./index.js",
-    output: {
-        path: __dirname,
-        filename: "bundle.js"
-    },
-    module: {
-        loaders: [
-            { test: /\.css$/, loader: "style!css" }
-        ]
-    }
+  entry: './index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: 'style!css' },
+      { test: /\.(jpg|png|gif)$/i, loader: 'file' },
+    ]
+  }
 };
 ```
 
@@ -496,7 +528,7 @@ Note:
 - Loads right to left, just like JS functions
   - `styleLoader(cssLoader(css))`
 - test is a regex on the full filename of resources
-- Css-loader:
+- CSS-loader:
   - interpret url / @import declarations
   - minify css
   - css modules
@@ -552,6 +584,7 @@ Note:
 
 - Again look at your bundle.js
 - Style-loader add a lot of JS
+- CSS is in JS
 
 ---
 
@@ -725,8 +758,9 @@ Note:
 ### Make a production build
 
 - Minify your javascript
-- Extract css file
+- Extract CSS file using `ExtractTextPlugin`
 - Use hashes for cache busting
+- Make sure your script with hash is part of HTML
 
 Note:
 - Cache static files indefinitely
@@ -735,11 +769,81 @@ Note:
 
 vvv
 
-### How to update your config?
+### A production config
 
-- You can use JS in your config
-- L
-TODO make production build
+``` javascript
+import webpack from 'webpack';
+import validate from 'webpack-validator';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+
+const production = process.env.NODE_ENV === 'production';
+
+const cssLoaders = production ?
+  ExtractTextPlugin.extract('style', 'css') :
+  'style!css';
+
+const prodPlugins = production ? [
+  // Minifies javascript
+  new webpack.optimize.UglifyJsPlugin({
+    compressor: {
+      warnings: false,
+    },
+    output: {
+      comments: false, // Also removes licences
+    },
+  }),
+  new ExtractTextPlugin('style.[contenthash:8].css', { allChunks: true }),
+] : [];
+
+
+export default validate({
+  entry: './index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.[hash:8].js',
+  },
+  module: {
+    loaders: [
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },
+      { test: /\.css$/, loader: cssLoader },
+    ],
+  },
+  plugins: [
+    // Put script / css with hash in html
+    // minifies html
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
+      inject: 'body',
+      minify: production && {
+        collapseWhitespace: true,
+      },
+    }),
+    ...prodPlugins,
+  ],
+});
+```
+
+Note:
+- NODE_ENV do determine what to run
+- Could also make copy for production
+- DEMO
+
+---
+
+### Advanced topics
+
+- Using webpack on the server https://github.com/halt-hammerzeit/universal-webpack
+- Bundle splitting and async loading https://webpack.github.io/docs/code-splitting.html
+
+Note:
+- Split bundles for vendor or per page
+- Async loading means at runtime when needed
+
+---
+
+## Linting javascript
 
 ---
 
@@ -750,6 +854,8 @@ TODO make production build
 
 Note:
 - Don't waste time looking for errors
+- Fail fast
+- Editor integration -> highlight errors
 - First there was jslint
 - jslint really strict and not configurable
 - jshint more sensible and configurable
@@ -759,7 +865,7 @@ vvv
 
 ### ESLint: The pluggable linting utility for javascript and JSX
 - parses javascript and checks for bugs and style errors
-- has multiple third-party configs
+- has multiple popular standard configs
 - supports custom parsers (babel)
 - has a fix option to fix some error automatically
 
@@ -771,17 +877,65 @@ Note:
 - working on making it better:
   - conflicts with other rules
 
-TODO eslint exercise
+vvv
+
+### Migrating to ESLint with existing code
+There are multiple options to choose depending on the size and quality of your codebase:
+- Pick a popular style guide
+- Let ESLint inspect your code
+- Make your own style rules
+
+Note:
+- Popular styleguides have many rules
+- Updating code might take long
+- Consider using `--fix` and fixable rules easier
+- ESLint can automatically determine rules
+- Useful when you have existing linting
+- Making own rules is much work
+
+vvv
+
+### Advanced topics
+- Use codemods to update code automatically https://github.com/cpojer/js-codemod
+- Enable linting rules to enforce new rules like:
+  - Use arrow functions
+  - `const` and `let` instead of `var`
+  - Trailing commas
+  - Use `import` instead of `require`
+- Make your own codemod using: https://astexplorer.net/
+
+Note:
+- Codemods parse JS and create updates
+- Only changes one thing, leaves rest intact
+- Enable eslint rule to enforce for new code
+- You can make your own codemods
+- Can be difficult, many edge cases
+- Use eslint output to update code yourself:
+  - Use shell script
+  - Make regex replacements
+
+vvv
+
+### Installing eslint
+``` sh
+npm i --save-dev eslint babel-eslint
+eslint --init
+# Pick "Use a popular style guide", "AirBnB" and "JavaScript"
+
+# Note some missing peer dependencies, install them:
+npm i --save-dev eslint-plugin-import eslint-plugin-jsx-a11y
+
+eslint *.js
+
+# try out:
+eslint --fix *.js
+```
+- Add to package.json scripts: `"lint": "eslint --fix *.js"`
+- Use with: `npm run lint`
 
 ---
 
-### Advanced topics
-
-- Using webpack on the server https://github.com/halt-hammerzeit/universal-webpack
-- Bundle splitting https://webpack.github.io/docs/code-splitting.html
-
-Note:
-- Split bundles for vendor or per page
+## CSS modules / postCSS
 
 ---
 
