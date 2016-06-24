@@ -1197,6 +1197,17 @@ Note:
 
 vvv
 
+### stylint
+- Catches errors in css
+- Is a PostCSS transform
+- Gives feedback quick where browsers would just ignore rules
+
+Note:
+- Catches both css codestyle (spaces) and actual errors / typos
+- Uses the parsing of postcss
+
+vvv
+
 ### Autoprefixer
 - Add prefixes if needed
 - Removes prefixes if they're not needed
@@ -1292,14 +1303,15 @@ Note:
 
 ### PostCSS exercise
 ``` sh
-npm i --save-dev postcss-loader autoprefixer precss
+npm i --save-dev postcss-loader stylelint \
+stylelint-config-standard autoprefixer precss
 ```
+
 ``` javascript
 // in webpack.config.babel.js
+import stylelint from 'stylelint';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
-
-// ...
 
 // Add to css loader
 const cssLoaderConfig = '{{ existing loaders }}!postcss'
@@ -1313,11 +1325,23 @@ const prodPlugins = production ? [
 {
   plugins: ...,
   postcss: () => [
+    stylelint,
     autoprefixer({ browsers: ['> 0.5% in NL'] }),
     lost,
   ],
 }
 ```
+
+vvv
+
+``` javascript
+//create styelelint.config.js
+
+module.exports = {
+  extends: 'stylelint-config-standard',
+};
+```
+
 ``` sh
 NODE_ENV=production webpack-dev-server
 # browse to http://localhost:8080/style.css
@@ -1325,13 +1349,24 @@ NODE_ENV=production webpack-dev-server
 
 vvv
 
-### Try out some new features
+### Try out PostCSS features
 ``` css
 /* add somewhere to see prefixes */
 display: flex;
 ```
 
 - Use some of the features listed here: https://github.com/jonathantneal/precss
+- Test stylelint errors:
+  - Change the indentation of a css file
+  - Remove newline between some rulesets
+  - Try adding:
+
+  ```
+  @import url(not-existing.css);
+  background-image: url(not-existing.svg);
+  font-size: 12pixels
+  ```
+
 
 ---
 
