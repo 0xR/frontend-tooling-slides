@@ -67,6 +67,7 @@ var counter = (function(){
 ```
 
 Note:
+- Has anyone used this?
 - Example of a classic JS module
 - There are others:
   - AMD
@@ -210,6 +211,10 @@ vvv
 <script src="/scripts/common/category-toggle-view-directive.js"></script>
 ```
 
+Note:
+
+- Familiar with code like this?
+
 ---
 
 ### Comparison to various tools
@@ -236,6 +241,7 @@ Note:
 <img src=img/grunt-logo.png alt="Logo grunt" width="200">
 
 Note:
+- Has anyone used this?
 - Which tasks can it do?
   - Call a transpiler
   - Concatenate files
@@ -258,6 +264,7 @@ Note:
 ![Logo gulp](img/logo-gulp.png)
 
 Note:
+- Has anyone used this?
 - The configuration is easier to read
 - Runs faster due to:
   - parallelization
@@ -279,6 +286,7 @@ Note:
 ![Logo RequireJS](img/logo-requirejs.png)
 
 Note:
+- Has anyone used this?
 
 - One of the first module loaders
   - Started in 2009
@@ -299,6 +307,7 @@ define(['jquery'] , function ($) {
 ```
 
 Note:
+- Has anyone used this?
 - Similar to NG DI
 - Dependencies in array
 - Function invoked with instances
@@ -317,6 +326,7 @@ Note:
 ![Logo browserify](img/logo-browserify.png)
 
 Note:
+- Has anyone used this?
 - NodeJS modules are CommonJS modules
 - Files with require calls
 - Browserify is focussed
@@ -340,6 +350,7 @@ Note:
 ![Logo jspm](img/logo-jspm.png)
 
 Note:
+- Has anyone used this?
 - New project
   - Is it ready yet?
 - Package manager means:
@@ -363,8 +374,10 @@ Note:
 - Plugin to convert CommonJS to ES2015
 
 Note:
+- Has anyone used this?
 - Goal is a small bundle
 - New project
+- Questions so far?
 
 ### Webpack: The flexible module bundle
 
@@ -383,15 +396,26 @@ Note:
 - Development server for incremental compilation
 
 Note:
-- Configuration takes some getting used to
-- Some say its difficult to learn
-- Easier to configure than Grunt
+- Has anyone used this?
+- I have not found something it can't do
+- I really like it
+- Configuration is not as hard as some say
+  - For simple cases you don't need any config
+  - Easier to configure than Grunt
 - When making a dev / production build and run on server / client can get confusing
+- All resources includes html, images, css, fonts and icons
 - Dev server:
   - Only load the changed files
   - Quicker than including everything always
 
 ---
+
+### Webpack demo
+
+- https://webpack.github.io/analyse/
+
+Note:
+- Also source-map explorer
 
 ### Getting started with webpack
 
@@ -482,7 +506,7 @@ var _template = require('lodash/template');
   - Use CSS in JS: `style-loader`
 
 Note:
-- Webpack parses 
+- Webpack parses require statement or <img src> or css import
 - We'll show examples in exercises
 
 vvv
@@ -892,6 +916,7 @@ Note:
 - Popular styleguides have many rules
 - Updating code might take long
 - Consider using `--fix` and fixable rules easier
+- I found out about fix way too late XD
 - ESLint can automatically determine rules
 - Useful when you have existing linting
 - Making own rules is much work
@@ -908,6 +933,7 @@ vvv
 - Make your own codemod using: https://astexplorer.net/
 
 Note:
+- Codemods are really cool
 - Codemods parse JS and create updates
 - Only changes one thing, leaves rest intact
 - Enable eslint rule to enforce for new code
