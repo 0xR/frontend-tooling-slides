@@ -501,7 +501,7 @@ vvv
 export PATH=./node_modules/.bin:$PATH
 
 # serves the current directory
-nws -o
+hs -o
 
 # generates bundle.js on file change
 webpack index.js bundle.js --watch
