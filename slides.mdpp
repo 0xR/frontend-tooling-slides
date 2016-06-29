@@ -500,14 +500,14 @@ vvv
 # makes locally install npm packages available on $PATH
 export PATH=./node_modules/.bin:$PATH
 
-# serves the current directory
-hs -o
-
 # generates bundle.js on file change
 webpack index.js bundle.js --watch
 
 # or minified build
 webpack index.js bundle.js --watch --optimize-minimize
+
+# serves the current directory
+hs -o
 ```
 
 vvv
@@ -628,10 +628,19 @@ vvv
 
 ``` javascript
 // in index.js
-require('index.css');
+require('./index.css');
 
 // in render.js
-require('render.css');
+require('./render.css');
+```
+```html
+<!-- in index.html replace src tag with: -->
+<script src="dist/bundle.js"></script>
+```
+
+```sh
+# running with:
+webpack --watch
 ```
 
 Note:
@@ -666,7 +675,10 @@ vvv
 npm install --save-dev webpack-dev-server
 webpack-dev-server --hot --inline
 ```
-
+```html
+<!-- in index.html replace src tag with: -->
+<script src="bundle.js"></script>
+```
 - Browse to `http://localhost:8080`
 - Now edit some css files
 
@@ -1421,6 +1433,53 @@ display: flex;
   font-size: 12pixels
   ```
 
+
+---
+
+###Mocha
+```sh
+npm i --save-dev mocha chai sinon sinon-chai
+```
+``` js
+// Add to package.json at the scripts section
+"test": "mocha --opts test-config/mocha.opts",
+"test:watch": "mocha --opts test-config/mocha.opts --watch",
+```
+
+`test-config/mocha.opts`
+
+```
+--compilers js:babel-core/register
+--require test-config/mochasetup.js
+**/__tests__/*[Ss]pec.js
+```
+
+vvv
+
+`test-config/mochasetup.js`
+
+```js
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+
+chai.use(sinonChai);
+
+global.expect = expect;
+global.sinon = sinon;
+```
+
+`__tests__/mocha-sinon-setup-spec.js`
+
+```js
+describe('Mocha and sinon setup', () => {
+  it('sinon should integrate with chai', () => {
+    const mySpy = sinon.spy();
+    mySpy('my args');
+    expect(mySpy).to.have.been.calledWithExactly('my args');
+  });
+});
+```
 
 ---
 
