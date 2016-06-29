@@ -17,6 +17,23 @@ https://twitter.com/rubenoostinga
 
 ---
 
+### Programme
+- History of module bundling / loading
+- webpack
+- eslint
+- CSS modules
+- postCSS
+  - styleint
+  - Other transforms
+
+Note:
+- History also compares tools
+- Lots of cool tools today
+- try to see if you can use it on your projects
+- Linting makes you more productive
+
+---
+
 ### Concepts to understand
 
 - JS bundles
@@ -378,6 +395,15 @@ Note:
 - Goal is a small bundle
 - New project
 - Questions so far?
+
+---
+
+### End of history
+- Where did webpack come from
+- Described some of the alternatives
+- Any questions so far?
+
+---
 
 ### Webpack: The flexible module bundle
 
